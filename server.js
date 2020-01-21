@@ -14,13 +14,9 @@ app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname,"public/notes.html"))
 });
 
-app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname,"public/index.html"))
-});
-
 app.get("/api/notes", function(req, res) {
     let theJSON = null;
-    fs.readFile("./db/db.json", function(err, data) {
+    fs.readFile("./public/db/db.json", function(err, data) {
       if (err) throw err;
       theJSON = JSON.parse(data);
       res.json(theJSON);
@@ -29,7 +25,7 @@ app.get("/api/notes", function(req, res) {
 
 app.post("/api/notes", function(req, res) {
     var newNote = req.body;
-    fs.readFile("./db/db.json", function(err, data) {
+    fs.readFile("./public/db/db.json", function(err, data) {
       if (err) throw err;
       let theJSON = JSON.parse(data);
       console.log(theJSON);
@@ -38,8 +34,12 @@ app.post("/api/notes", function(req, res) {
       write(theJSON);
 });
 
+app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname,"public/index.html"))
+});
+
 function write(theJSON) {
-    fs.writeFile("./db/db.json", JSON.stringify(theJSON), function(err, data) {
+    fs.writeFile("./public/db/db.json", JSON.stringify(theJSON), function(err, data) {
       if (err) throw err;
       console.log("Successfully saved");
     });
@@ -62,7 +62,7 @@ app.delete("/api/notes/:id", function(req, res) {
     return;
   }
 
-  fs.readFile("./db/db.json", function(err, data) {
+  fs.readFile("./public/db/db.json", function(err, data) {
     if (err) throw err;
     let theJSON = JSON.parse(data);
     console.log(theJSON);
@@ -78,7 +78,7 @@ app.delete("/api/notes/:id", function(req, res) {
   });
 
   function write(theJSON) {
-    fs.writeFile("./db/db.json", JSON.stringify(theJSON), function(err, data) {
+    fs.writeFile("./public/db/db.json", JSON.stringify(theJSON), function(err, data) {
       if (err) throw err;
       console.log("Successfully saved");
     });
